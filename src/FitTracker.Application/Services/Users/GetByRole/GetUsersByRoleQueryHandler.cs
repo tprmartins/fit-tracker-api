@@ -6,7 +6,7 @@ using FitTracker.Domain.Shared;
 
 namespace FitTracker.Application.Services.Users.GetByRole
 {
-    internal sealed class GetUsersByRoleQueryHandler : IQueryHandler<GetUsersByRoleQuery, List<UserResponse>>
+    public sealed class GetUsersByRoleQueryHandler : IQueryHandler<GetUsersByRoleQuery, List<UserResponse>>
     {
         private readonly IUserRepository _userRepository;
 

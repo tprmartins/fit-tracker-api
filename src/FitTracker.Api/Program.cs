@@ -17,18 +17,17 @@ builder.Host.UseSerilog();
 
 // builder.Services.AddSingleton(sp => SecretManagerServiceClient.Create());
 
-builder
-    .Services
-    .Scan(
-        selector => selector
-            .FromAssemblies(
-                FitTracker.Infra.AssemblyReference.Assembly)
-            .AddClasses(false)
-            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
-            .AsImplementedInterfaces()
-            .WithScopedLifetime());
+builder.Services.Scan(
+    selector => selector
+        .FromAssemblies(FitTracker.Infra.AssemblyReference.Assembly)
+        .AddClasses(classes => classes
+            .Where(type => !typeof(IHostedService).IsAssignableFrom(type)))
+        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+        .AsImplementedInterfaces()
+        .WithScopedLifetime());
 
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+builder.Services.ConfigureOptions<EmailOptionsSetup>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -123,10 +122,11 @@ app.UseMiddleware<CorrelationIdMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseRateLimiter();
 
 app.UseAuthentication();
-app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace FitTracker.IntegrationTests;
+﻿namespace FitTracker.UnitTests;
 
 public class UnitTest1
 {

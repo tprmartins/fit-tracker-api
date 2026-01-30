@@ -18,7 +18,7 @@ namespace FitTracker.Infra.Authentication
         }
 
         public string GenerateAccessToken(User user)
-        {           
+        {
             return GenerateToken(user, DateTime.UtcNow.AddHours(1));
         }
 
@@ -97,6 +97,7 @@ namespace FitTracker.Infra.Authentication
             {
                 new (ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
                 new (ClaimTypes.Email, user.Email.Value.ToString()),
+                new (ClaimTypes.Role, user.Role.ToString()),
                 // Removido 'Document' por segurança (dados sensíveis no JWT)
             };
 

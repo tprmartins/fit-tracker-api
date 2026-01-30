@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace FitTracker.Application.Services.Users.Login
 {
-    internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginResponse>
+    public sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginResponse>
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtProvider _jwtProvider;
@@ -98,7 +98,7 @@ namespace FitTracker.Application.Services.Users.Login
                 user.Email.Value, 
                 user.Phone);
 
-            var response = new LoginResponse(accessToken, refreshToken, userResponse);
+            var response = new LoginResponse(accessToken, refreshToken);
 
             return response;
         }

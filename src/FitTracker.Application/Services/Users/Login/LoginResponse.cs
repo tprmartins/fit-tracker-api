@@ -1,6 +1,6 @@
 ﻿namespace FitTracker.Application.Services.Users.Login
 {
-    public sealed record LoginResponse(string AccessToken, string RefreshToken, UserResponse User)
+    public sealed record LoginResponse(string AccessToken, string RefreshToken, UserResponse? User = null)
     {
     }
 

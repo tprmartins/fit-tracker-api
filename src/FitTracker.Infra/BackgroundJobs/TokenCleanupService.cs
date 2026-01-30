@@ -8,15 +8,15 @@ namespace FitTracker.Infra.BackgroundJobs
     public class TokenCleanupService : BackgroundService
     {
         private readonly ILogger<TokenCleanupService> _logger;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceProviderFactory;
         private readonly TimeSpan _cleanupInterval = TimeSpan.FromHours(24);
 
         public TokenCleanupService(
             ILogger<TokenCleanupService> logger,
-            IServiceProvider serviceProvider)
+            IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
+            _serviceProviderFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -42,7 +42,7 @@ namespace FitTracker.Infra.BackgroundJobs
 
         private async Task CleanupExpiredTokensAsync(CancellationToken cancellationToken)
         {
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _serviceProviderFactory.CreateScope();
             var refreshTokenRepository = scope.ServiceProvider.GetRequiredService<IRefreshTokenRepository>();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 

@@ -18,7 +18,15 @@ namespace FitTracker.Api.Middleware
                 ?? Guid.NewGuid().ToString();
 
             context.Items["CorrelationId"] = correlationId;
-            context.Response.Headers.Append(CorrelationIdHeader, correlationId);
+
+            context.Response.OnStarting(() =>
+            {
+                if (!context.Response.Headers.ContainsKey(CorrelationIdHeader))
+                {
+                    context.Response.Headers.Append(CorrelationIdHeader, correlationId);
+                }
+                return Task.CompletedTask;
+            });
 
             using (_logger.BeginScope(new Dictionary<string, object>
             {
