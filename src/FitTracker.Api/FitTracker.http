@@ -1,0 +1,6 @@
+@NoflowApi_HostAddress = http://localhost:5063
+
+GET {{NoflowApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
