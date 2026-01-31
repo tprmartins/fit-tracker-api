@@ -27,7 +27,7 @@ namespace FitTracker.UnitTests.Controllers
             // Arrange
             var students = new List<UserResponse>
             {
-                new UserResponse("Student 1", Guid.NewGuid().ToString(), "12345678901", "student1@test.com", "123456789")
+                new UserResponse("Student 1", Guid.NewGuid().ToString(), "12345678901", "student1@test.com", "123456789", 1, 1)
             };
             var result = Result.Success(students);
 

@@ -1,4 +1,4 @@
-namespace FitTracker.Api.Options
+namespace FitTracker.Infra.Options
 {
     public class EmailOptions
     {
@@ -9,5 +9,6 @@ namespace FitTracker.Api.Options
         public string FromEmail { get; set; } = string.Empty;
         public string FromName { get; set; } = string.Empty;
         public bool EnableSsl { get; set; } = true;
+        public string BaseUrl { get; set; } = "http://localhost:3000";
     }
 }

@@ -15,6 +15,10 @@ namespace FitTracker.Infra.Configurations
                 userId => userId.Value,
                 value => new UserId(value));
 
+            builder.Property(c => c.BlockedBy).HasConversion(
+                userId => userId != null ? userId.Value : (Guid?)null,
+                value => value != null ? new UserId(value.Value) : null);
+
             builder.Property(c => c.Name).HasMaxLength(128).IsRequired();
 
             builder.Property(c => c.Email)

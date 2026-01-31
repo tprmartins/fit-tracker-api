@@ -22,9 +22,11 @@ namespace FitTracker.Application.Services.Users.GetByRole
             var response = users.Select(u => new UserResponse(
                 u.Name,
                 u.Id.Value.ToString(),
-                u.Document.Value,
+                u.Document?.Value ?? string.Empty,
                 u.Email.Value,
-                u.Phone
+                u.Phone,
+                (int)u.Role,
+                (int)u.Status
             )).ToList();
 
             return response;

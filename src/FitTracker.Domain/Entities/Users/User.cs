@@ -17,6 +17,7 @@ namespace FitTracker.Domain.Entities.Users
             Phone = phone;
             Role = role;
             Status = status;
+            CreatedAt = DateTime.UtcNow;
         }
 
         private User() { }
@@ -41,7 +42,15 @@ namespace FitTracker.Domain.Entities.Users
 
         public DateTime? TokenExpiresAt { get; private set; }
 
+        public bool IsActive { get; private set; } = true;
+
+        public DateTime? BlockedAt { get; private set; }
+
+        public UserId? BlockedBy { get; private set; }
+
         public bool IsDeleted { get; private set; }
+
+        public DateTime CreatedAt { get; private set; }
 
         public DateTime? DeletedAt { get; private set; }
 
@@ -87,6 +96,20 @@ namespace FitTracker.Domain.Entities.Users
         {
             IsDeleted = true;
             DeletedAt = DateTime.UtcNow;
+        }
+
+        public void Block(UserId blockedBy)
+        {
+            IsActive = false;
+            BlockedAt = DateTime.UtcNow;
+            BlockedBy = blockedBy;
+        }
+
+        public void Unblock()
+        {
+            IsActive = true;
+            BlockedAt = null;
+            BlockedBy = null;
         }
     }
 }

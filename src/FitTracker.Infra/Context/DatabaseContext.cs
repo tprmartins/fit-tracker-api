@@ -24,6 +24,7 @@ namespace FitTracker.Infra.Context
         public DbSet<Workout> Workouts { get; set; } = default!;
         public DbSet<WorkoutDay> WorkoutDays { get; set; } = default!;
         public DbSet<Exercise> Exercises { get; set; } = default!;
+        public DbSet<WorkoutExecution> WorkoutExecutions { get; set; } = default!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) =>

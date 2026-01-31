@@ -19,8 +19,8 @@ namespace FitTracker.Application.Services.Users.Login
         private readonly IUnitOfWork _unitOfWork;
 
         public LoginCommandHandler(
-            IUserRepository userRepository, 
-            IJwtProvider jwtProvider, 
+            IUserRepository userRepository,
+            IJwtProvider jwtProvider,
             IPasswordHash passwordHash,
             IRefreshTokenRepository refreshTokenRepository,
             IUnitOfWork unitOfWork)
@@ -35,14 +35,14 @@ namespace FitTracker.Application.Services.Users.Login
         public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             User? user;
-            
+
             string emailRegex = @"^[\w.-]+@(?=[a-z\d][^.]*\.)[a-z\d.-]*[^.]$";
 
             var isEmail = Regex.IsMatch(request.Document!, emailRegex!, RegexOptions.IgnoreCase);
 
             if (isEmail)
             {
-                var email = Email.Create(request.Document!);                
+                var email = Email.Create(request.Document!);
 
                 if (email.IsFailure)
                 {
@@ -76,6 +76,12 @@ namespace FitTracker.Application.Services.Users.Login
                 return Result.Failure<LoginResponse>(DomainErrors.User.InvalidCredentials);
             }
 
+            // Check if user is blocked
+            if (!user.IsActive)
+            {
+                return Result.Failure<LoginResponse>(new Error("User.Blocked", "Your account has been blocked. Please contact support."));
+            }
+
             string accessToken = _jwtProvider.GenerateAccessToken(user);
 
             string refreshToken = _jwtProvider.GenerateRefreshToken();
@@ -92,13 +98,15 @@ namespace FitTracker.Application.Services.Users.Login
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             UserResponse userResponse = new(
-                user.Name, 
-                user.Id.Value.ToString(), 
-                user.Document?.Value ?? string.Empty, 
-                user.Email.Value, 
-                user.Phone);
+                user.Name,
+                user.Id.Value.ToString(),
+                user.Document?.Value ?? string.Empty,
+                user.Email.Value,
+                user.Phone,
+                (int)user.Role,
+                (int)user.Status);
 
-            var response = new LoginResponse(accessToken, refreshToken);
+            var response = new LoginResponse(accessToken, refreshToken, userResponse);
 
             return response;
         }

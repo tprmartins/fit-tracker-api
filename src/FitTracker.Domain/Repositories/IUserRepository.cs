@@ -19,6 +19,16 @@ namespace FitTracker.Domain.Repositories
 
         Task<User?> GetByRegistrationTokenAsync(string token, CancellationToken cancellationToken = default);
 
+        Task<int> CountByRoleAsync(FitTracker.Domain.Enums.UserRole role, CancellationToken cancellationToken = default);
+
+        Task<int> CountActiveAsync(CancellationToken cancellationToken = default);
+
+        Task<int> CountBlockedAsync(CancellationToken cancellationToken = default);
+
+        Task<int> CountAllAsync(CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default);
+
         void Add(User user);
     }
 }

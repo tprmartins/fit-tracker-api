@@ -12,8 +12,10 @@ namespace FitTracker.Application.Services.Users.Login
                 .WithMessage("Document or Email is required");
 
             RuleFor(x => x.Password)
-                .NotEmpty()                
-                .WithMessage("Password is required");
+                .NotEmpty()
+                .WithMessage("Password is required")
+                .MinimumLength(6)
+                .WithMessage("Password must be at least 6 characters long");
         }
     }
 }

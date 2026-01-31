@@ -47,9 +47,35 @@ namespace FitTracker.Infra.Repositories
                 .Where(user => user.Role == role)
                 .ToListAsync(cancellationToken);
 
+        public async Task<int> CountByRoleAsync(FitTracker.Domain.Enums.UserRole role, CancellationToken cancellationToken = default) =>
+             await _dbContext
+                .Set<User>()
+                .CountAsync(user => user.Role == role, cancellationToken);
+
         public async Task<User?> GetByRegistrationTokenAsync(string token, CancellationToken cancellationToken = default) =>
             await _dbContext
                 .Set<User>()
                 .FirstOrDefaultAsync(user => user.RegistrationToken == token, cancellationToken);
+
+        public async Task<int> CountActiveAsync(CancellationToken cancellationToken = default) =>
+            await _dbContext
+                .Set<User>()
+                .CountAsync(user => user.IsActive, cancellationToken);
+
+        public async Task<int> CountBlockedAsync(CancellationToken cancellationToken = default) =>
+            await _dbContext
+                .Set<User>()
+                .CountAsync(user => !user.IsActive, cancellationToken);
+
+        public async Task<int> CountAllAsync(CancellationToken cancellationToken = default) =>
+            await _dbContext
+                .Set<User>()
+                .CountAsync(cancellationToken);
+
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default) =>
+            await _dbContext
+                .Set<User>()
+                .OrderBy(u => u.Name)
+                .ToListAsync(cancellationToken);
     }
 }

@@ -4,7 +4,7 @@
     {
     }
 
-    public sealed record UserResponse(string Name, string Id, string Document, string Email, string Phone)
+    public sealed record UserResponse(string Name, string Id, string Document, string Email, string Phone, int Role, int Status)
     {
     }
 }

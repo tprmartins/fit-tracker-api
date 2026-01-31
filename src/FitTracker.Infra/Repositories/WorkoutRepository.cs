@@ -25,13 +25,26 @@ namespace FitTracker.Infra.Repositories
                 .Set<Workout>()
                 .Where(w => w.StudentId == studentId)
                 .Include(w => w.WorkoutDays)
+                .ThenInclude(wd => wd.Exercises)
                 .ToListAsync(cancellationToken);
 
         public async Task<IEnumerable<Workout>> GetByPersonalIdAsync(UserId personalId, CancellationToken cancellationToken) =>
             await _dbContext
                 .Set<Workout>()
                 .Where(w => w.PersonalId == personalId)
+                .Include(w => w.WorkoutDays)
+                .ThenInclude(wd => wd.Exercises)
                 .ToListAsync(cancellationToken);
+
+        public async Task<int> CountByPersonalIdAsync(UserId personalId, CancellationToken cancellationToken) =>
+            await _dbContext
+                .Set<Workout>()
+                .CountAsync(w => w.PersonalId == personalId, cancellationToken);
+
+        public async Task<int> CountAllAsync(CancellationToken cancellationToken) =>
+            await _dbContext
+                .Set<Workout>()
+                .CountAsync(cancellationToken);
 
         public void Add(Workout workout) =>
             _dbContext.Set<Workout>().Add(workout);

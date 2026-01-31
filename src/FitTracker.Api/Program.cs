@@ -1,4 +1,5 @@
 ﻿using FitTracker.Api.Options;
+using FitTracker.Infra.Options;
 using FitTracker.Application.Behaviors;
 using FitTracker.Infra.Context;
 using FluentValidation;
@@ -26,8 +27,12 @@ builder.Services.Scan(
         .AsImplementedInterfaces()
         .WithScopedLifetime());
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
-builder.Services.ConfigureOptions<EmailOptionsSetup>();
+builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("EmailOptions"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -63,7 +68,7 @@ builder.Services.AddRateLimiter(options =>
                 QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst,
                 QueueLimit = 0
             }));
-    
+
     options.AddPolicy("auth", httpContext =>
         System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",

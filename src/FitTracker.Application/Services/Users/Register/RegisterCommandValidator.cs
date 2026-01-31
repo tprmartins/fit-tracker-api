@@ -11,8 +11,10 @@ namespace FitTracker.Application.Services.Users.Register
                 .WithMessage("Document is required");
 
             RuleFor(x => x.Password)
-                .NotEmpty()                
+                .NotEmpty()
                 .WithMessage("Password is required")
+                .MinimumLength(6)
+                .WithMessage("Password must be at least 6 characters long")
                 .MaximumLength(256)
                 .WithMessage("Password cannot be longer than 256 characters");
 
